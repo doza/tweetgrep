@@ -72,16 +72,16 @@ def main():
         sys.exit()
 
     if consumer_key == "":
-        print("Error: consumer_key must be set in tweetgrep.py")
+        print("Error: consumer_key must be set in tweetgrep.py or set the TWITTER_CONSUMER_KEY environment variable")
         sys.exit()
     if consumer_secret == "":
-        print("Error: consumer_secret must be set in tweetgrep.py")
+        print("Error: consumer_secret must be set in tweetgrep.py or set the TWITTER_CONSUMER_SECRET environment variable")
         sys.exit()
     if access_key == "":
-        print("Error: access_key must be set in tweetgrep.py")
+        print("Error: access_key must be set in tweetgrep.py or set the TWITTER_ACCESS_KEY environment variable")
         sys.exit()
     if access_secret == "":
-        print("Error: access_secret must be set in tweetgrep.py")
+        print("Error: access_secret must be set in tweetgrep.py or set the TWITTER_ACCESS_SECRET environment variable")
         sys.exit()
 
     parser = argparse.ArgumentParser()
