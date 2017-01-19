@@ -146,13 +146,22 @@ def main():
         user_tweets = fetch_all_tweets(twitter_name)
 
         #write the csv  
-        with open(cache_name, 'w') as f:
+        with open(cache_name, 'wt') as f:
             logger.debug("Creating new cache file")
             writer = csv.writer(f)
             writer.writerow(["screen_name","id","created_at","text","status_link"])
             writer.writerows(user_tweets)
 
-
+    with open(cache_name, 'rt') as f:
+        hit_counter = 0
+        tweet_counter = -1
+        reader = csv.reader(f, delimiter=',')
+        for row in reader:
+            tweet_counter += 1
+            if search_string.lower() in row[3].lower():
+                hit_counter += 1
+                print("%s\t%s\n%s" % (row[2], row[3], row[4]))
+    print("Found %s total results in %s tweets" % (hit_counter, tweet_counter))
 
 
 if __name__ == '__main__':
