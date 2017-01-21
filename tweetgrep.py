@@ -29,6 +29,7 @@ import argparse
 from datetime import datetime
 import logging
 import csv
+import re
 
 try:
     import tweepy
@@ -80,7 +81,7 @@ def fetch_all_tweets(screen_name):
         logger.debug("...%s tweets downloaded so far" % (len(all_tweets)))
     
     #transform the tweepy tweets into a 2D array that will populate the csv 
-    results = [[screen_name, tweet.id_str, tweet.created_at, tweet.text.encode("utf-8"), "https://twitter.com/%s/status/%s" % (screen_name, tweet.id_str)] for tweet in all_tweets]
+    results = [[screen_name, tweet.id_str, tweet.created_at, tweet.text, "https://twitter.com/%s/status/%s" % (screen_name, tweet.id_str)] for tweet in all_tweets]
 
     return results
     
@@ -110,6 +111,9 @@ def main():
     parser.add_argument("-d", "--debug", help="Enable debugging output",
         action="store_const", dest="log_level",
         const=logging.DEBUG, default=logging.WARNING)
+    parser.add_argument("-r", "--regex", help="Search using a regex instead of a simple string",
+        action="store_true", dest="use_regex",
+        default=False)
     parser.add_argument("search_string", help="The string you are searching for in a user's tweets")
     parser.add_argument("twitter_name", help="User's Twitter name you are searching")
 
@@ -174,15 +178,24 @@ def main():
             writer.writerow(["screen_name","id","created_at","text","status_link"])
             writer.writerows(user_tweets)
 
+    if args.use_regex:
+        regex = re.compile(search_string)
+
     with open(cache_name, 'rt') as f:
         hit_counter = 0
         tweet_counter = -1
         reader = csv.reader(f, delimiter=',')
         for row in reader:
             tweet_counter += 1
-            if search_string.lower() in row[3].lower():
+            if not args.use_regex and search_string.lower() in row[3].lower():
                 hit_counter += 1
                 print("%s\t%s\n%s" % (row[2], row[3], row[4]))
+            elif args.use_regex and regex.search(row[3]):
+                hit_counter += 1
+                print("%s\t%s\n%s" % (row[2], row[3], row[4]))
+            else:
+                pass
+
     print("Found %s total results in %s tweets" % (hit_counter, tweet_counter))
 
 
