@@ -37,6 +37,8 @@ try:
 except ImportError:
     tweepy_installed = False
 
+__version__ = "0.1.0"    
+
 #Twitter API credentials
 consumer_key = os.getenv('TWITTER_CONSUMER_KEY', "")
 consumer_secret = os.getenv('TWITTER_CONSUMER_SECRET', "")
@@ -111,9 +113,14 @@ def main():
     parser.add_argument("-d", "--debug", help="Enable debugging output",
         action="store_const", dest="log_level",
         const=logging.DEBUG, default=logging.WARNING)
+    parser.add_argument("-i", "--ignore-case", help="Ignore case when searching",
+        action="store_true", dest="ignore_case",
+        default=False)
     parser.add_argument("-r", "--regex", help="Search using a regex instead of a simple string",
         action="store_true", dest="use_regex",
         default=False)
+    parser.add_argument("-V", "--version", action="version",
+                    version="%(prog)s {version}".format(version=__version__))
     parser.add_argument("search_string", help="The string you are searching for in a user's tweets")
     parser.add_argument("twitter_name", help="User's Twitter name you are searching")
 
@@ -187,10 +194,16 @@ def main():
         reader = csv.reader(f, delimiter=',')
         for row in reader:
             tweet_counter += 1
-            if not args.use_regex and search_string.lower() in row[3].lower():
+            if args.ignore_case:
+                tweet = row[3].lower()
+                search_string = search_string.lower()
+            else:
+                tweet = row[3]
+
+            if not args.use_regex and search_string in tweet:
                 hit_counter += 1
                 print("%s\t%s\n%s" % (row[2], row[3], row[4]))
-            elif args.use_regex and regex.search(row[3]):
+            elif args.use_regex and regex.search(tweet):
                 hit_counter += 1
                 print("%s\t%s\n%s" % (row[2], row[3], row[4]))
             else:
