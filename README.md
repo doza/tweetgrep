@@ -8,6 +8,8 @@ tweetgrep is a simple Python script that searches a Twitter user's tweets for a 
  * [Installing tweetgrep](#installingtweetgrep)
  * [Configuring tweetgrep](#configuringtweetgrep)
 * [Usage](#usage)
+* [How it works](#howitworks)
+ * [Caching](#caching)
 * [License](#license)
  
 <a name="installation"></a>
@@ -113,6 +115,22 @@ optional arguments:
   -r, --regex         Search using a regex instead of a simple string
   -V, --version       show program's version number and exit
 ```
+
+<a name="howitworks"></a>
+## How it works
+
+tweetgrep uses the Twitter API to download a user's tweets and search for the specified term or pattern.  At a high level, this is how it works:
+
+1. tweetgrep leverages the Tweepy library to query the Twitter API using your credentials in order to download all of a user's tweets. **Note: due to limitations with the Twitter API, we are only able to retrieve and search the last 3,200 tweets from an individual user.**
+2. All of the tweets returned by the API are stored in a local CSV file in the current directory that uses the naming convention username_cache.dat. For example, if you are searching tweets from the BillGates Twitter account the file will be named billgates_cache.dat.
+3. tweetgrep then searches the tweets contained in the local .dat file and prints any results.
+
+<a name="caching"></a>
+### Caching
+
+In order to speed up future searches and not constantly hit the API, tweetgrep first looks for a local cache file containing the user's tweets before requesting results from the API.  If a cache file exists and is less than 1 day old, that file will be used for the search.  If the file does not exist or is more than 1 day old, tweetgrep will query the Twitter API and use those results to create a new cache file that will be used for the search.
+
+You may manually delete any of the cache.dat files to force tweetgrep to use the API instead of cached tweets.
 
 <a name="license"></a>
 ## License
