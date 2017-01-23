@@ -2,8 +2,18 @@
 
 tweetgrep is a simple Python script that searches a Twitter user's tweets for a specific search term.
 
+## Contents
+* [Installation](#installation)
+ * [Prerequisites](#prerequisites)
+ * [Installing tweetgrep](#installingtweetgrep)
+ * [Configuring tweetgrep](#configuringtweetgrep)
+* [Usage](#usage)
+* [License](#license)
+ 
+<a name="installation"></a>
 ## Installation
 
+<a name="prerequisites"></a>
 ### Prerequisites
 
 tweetgrep requires the Tweepy library, which can be installed via pip:
@@ -14,6 +24,7 @@ pip install tweepy
 
 You will also need Twitter API keys and secrets that you can get by creating an application on https://apps.twitter.com 
 
+<a name="installingtweetgrep"></a>
 ### Installing tweetgrep
 
 Since tweetgrep is a standalone script, there really isn't much to install.
@@ -36,6 +47,7 @@ Once tweetgrep.py is on your system, mark it as an executable if it isn't alread
 chmod 755 tweetgrep.py
 ```
 
+<a name="configuringtweetgrep"></a>
 ### Configuring tweetgrep
 
 tweetgrep requires 4 pieces of information from Twitter in order to interact with the Twitter API:
@@ -82,10 +94,27 @@ access_secret = os.getenv('TWITTER_ACCESS_SECRET', "LKH82IKAV00")
 
 Once your credential information is set, you are ready to use tweetgrep.
 
+<a name="usage"></a>
 ## Usage
 
+```
+usage: tweetgrep.py [-h] [-d] [-i] [-b] [-r] [-V] search_string twitter_name
 
+positional arguments:
+  search_string       The string you are searching for in a user's tweets
+  twitter_name        User's Twitter name you are searching
 
+optional arguments:
+  -h, --help          show this help message and exit
+  -d, --debug         Enable debugging output
+  -i, --ignore-case   Ignore case when searching
+  -b, --brief-output  Only show the contents of the tweets without extra
+                      information (date and link)
+  -r, --regex         Search using a regex instead of a simple string
+  -V, --version       show program's version number and exit
+```
+
+<a name="license"></a>
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
