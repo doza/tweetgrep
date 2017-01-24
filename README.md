@@ -18,6 +18,8 @@ tweetgrep is a simple Python script that searches a Twitter user's tweets for a 
 <a name="prerequisites"></a>
 ### Prerequisites
 
+tweetgrep has only been tested on Linux with Python 3. It likely will not work cleanly with Python 2 without some modifications.
+
 tweetgrep requires the Tweepy library, which can be installed via pip:
 
 ```
