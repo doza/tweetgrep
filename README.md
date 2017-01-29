@@ -10,6 +10,7 @@ tweetgrep is a simple Python script that searches a Twitter user's tweets for a 
 * [Usage](#usage)
 * [How it works](#howitworks)
  * [Caching](#caching)
+* [Examples](#examples)
 * [License](#license)
  
 <a name="installation"></a>
@@ -102,20 +103,23 @@ Once your credential information is set, you are ready to use tweetgrep.
 ## Usage
 
 ```
-usage: tweetgrep.py [-h] [-d] [-i] [-b] [-r] [-V] search_string twitter_name
+usage: tweetgrep.py [-h] [-d] [-i] [-b] [-r] [-f] [-V]
+                    search_string twitter_name
 
 positional arguments:
-  search_string       The string you are searching for in a user's tweets
-  twitter_name        User's Twitter name you are searching
+  search_string         The string you are searching for in a user's tweets
+  twitter_name          User's Twitter name you are searching
 
 optional arguments:
-  -h, --help          show this help message and exit
-  -d, --debug         Enable debugging output
-  -i, --ignore-case   Ignore case when searching
-  -b, --brief-output  Only show the contents of the tweets without extra
-                      information (date and link)
-  -r, --regex         Search using a regex instead of a simple string
-  -V, --version       show program's version number and exit
+  -h, --help            show this help message and exit
+  -d, --debug           Enable debugging output
+  -i, --ignore-case     Ignore case when searching
+  -b, --brief-output    Only show the contents of the tweets without extra
+                        information (date and link)
+  -r, --regex           Search using a regex instead of a simple string
+  -f, --force-download  Force a download of the user's tweets instead of using
+                        the local cache
+  -V, --version         show program's version number and exit
 ```
 
 <a name="howitworks"></a>
@@ -132,7 +136,40 @@ tweetgrep uses the Twitter API to download a user's tweets and search for the sp
 
 In order to speed up future searches and not constantly hit the API, tweetgrep first looks for a local cache file containing the user's tweets before requesting results from the API.  If a cache file exists and is less than 1 day old, that file will be used for the search.  If the file does not exist or is more than 1 day old, tweetgrep will query the Twitter API and use those results to create a new cache file that will be used for the search.
 
-You may manually delete any of the cache.dat files to force tweetgrep to use the API instead of cached tweets.
+You may manually delete any of the cache.dat files to force tweetgrep to use the API instead of cached tweets or use the -f flag when running tweetgrep.
+
+<a name="examples"></a>
+## Examples
+
+Find all tweets from the @nasa account that mention Mars (output clipped):
+```
+$ ./tweetgrep.py Mars nasa
+....
+2016-05-30 23:21:14	See Mars...no scope needed! Look up &amp; to right of the moon to see Mars at closest approach: https://t.co/1RUrPu86tU https://t.co/BzRzNHf5XW
+https://twitter.com/nasa/status/737423654322077696
+2016-05-30 19:16:12	Get outside to see a burnt orange Mars and a golden yellow Saturn in the night sky. Find out when and where to look:
+https://t.co/75NEgH3O8p
+https://twitter.com/nasa/status/737361990461489152
+Found 255 total results in 3212 tweets
+```
+
+Use a regular expression to find all tweets from @realdonaldtrump that end in "Sad!":
+```
+$ ./tweetgrep.py -r 'Sad!$' realdonaldtrump
+2017-01-14 13:07:12	mention crime infested) rather than falsely complaining about the election results. All talk, talk, talk - no action or results. Sad!
+https://twitter.com/realdonaldtrump/status/820255947956383744
+2016-09-04 23:05:24	The Great State of Arizona, where I just had a massive rally (amazing people), has a very weak and ineffective Senator, Jeff Flake. Sad!
+https://twitter.com/realdonaldtrump/status/772571293438840832
+2016-08-15 01:34:25	Certain Republicans who have lost to me would rather save face by fighting me than see the U.S.Supreme Court get proper appointments. Sad!
+https://twitter.com/realdonaldtrump/status/764998650598686721
+2016-05-03 23:02:55	Wow, Lyin' Ted Cruz really went wacko today. Made all sorts of crazy charges. Can't function under pressure - not very presidential. Sad!
+https://twitter.com/realdonaldtrump/status/727634574298255361
+2016-04-25 03:49:17	Lyin' Ted and Kasich are mathematically dead and totally desperate. Their donors &amp; special interest groups are not happy with them. Sad!
+https://twitter.com/realdonaldtrump/status/724445148910915584
+2016-03-17 10:09:00	Stuart Stevens, the failed campaign manager of Mitt Romney's historic loss, is now telling the Republican Party what to do with Trump. Sad!
+https://twitter.com/realdonaldtrump/status/710407581899079680
+Found 6 total results in 3210 tweets
+```
 
 <a name="license"></a>
 ## License
