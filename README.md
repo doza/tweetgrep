@@ -1,6 +1,6 @@
 # tweetgrep
 
-tweetgrep is a simple Python script that searches a Twitter user's tweets using a simple search term or a regular expression.
+tweetgrep is a Python command line tool that searches a Twitter user's tweets using a simple search term or a regular expression
 
 ## Contents
 * [Installation](#installation)
